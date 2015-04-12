@@ -5,11 +5,11 @@
 #include "Counters.h"
 #include <stdint.h>
 
+/* You might want to make this an interface and have per eMessageType
+ * processing */
 class Message {
     uint32_t id_;
     eMessageType type_;
-    
-    /* Add any other stuff here - e.g. a payload */
 
 public:
 
@@ -25,25 +25,26 @@ public:
     void process();
 };
 
+
 void Message::process() {
     switch (type_) {
     case MSG_CONFIG:
-        __sync_fetch_and_add(Counters::at(MSG_CONFIG), 1);
+        __sync_add_and_fetch(Counters::at(MSG_CONFIG), 1);
         LOG_INFO("id: " << id_ << "," << STR(MSG_CONFIG) << "\n");
         break;
 
     case MSG_REQUEST:
-        __sync_fetch_and_add(Counters::at(MSG_REQUEST), 1);
+        __sync_add_and_fetch(Counters::at(MSG_REQUEST), 1);
         LOG_INFO("id: " << id_ << "," << STR(MSG_REQUEST) << "\n");
         break;
 
     case MSG_RESPONSE:
-        __sync_fetch_and_add(Counters::at(MSG_RESPONSE), 1);
+        __sync_add_and_fetch(Counters::at(MSG_RESPONSE), 1);
         LOG_INFO("id: " << id_ << "," << STR(MSG_RESPONSE) << "\n");
         break;
  
     case MSG_TIMER:
-        __sync_fetch_and_add(Counters::at(MSG_TIMER), 1);
+        __sync_add_and_fetch(Counters::at(MSG_TIMER), 1);
         LOG_INFO("id: " << id_ << "," << STR(MSG_TIMER) << "\n");
         break;
 
